@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, MutableRefObject } from 'react'
 
 import '../styles/tasklist.scss'
 
@@ -13,6 +13,7 @@ interface Task {
 export function TaskList() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTaskTitle, setNewTaskTitle] = useState('');
+  const taskTittle = useRef() as MutableRefObject<HTMLInputElement>
 
   function handleCreateNewTask() {
     if (newTaskTitle) {
@@ -21,6 +22,7 @@ export function TaskList() {
       const listTask = [...tasks, newTask]
       setTasks(listTask)
       setNewTaskTitle('')
+      taskTittle.current.focus()
     }
   }
 
@@ -50,6 +52,8 @@ export function TaskList() {
             placeholder="Adicionar novo todo" 
             onChange={(e) => setNewTaskTitle(e.target.value)}
             value={newTaskTitle}
+            ref={taskTittle}
+            autoFocus
           />
           <button type="submit" data-testid="add-task-button" onClick={handleCreateNewTask}>
             <FiCheckSquare size={16} color="#fff"/>
